@@ -4,8 +4,6 @@ import { useTheme } from "../../context/ThemeContext";
 
 import { FaMapPin, FaEnvelope, FaPhone } from 'react-icons/fa';
 
-
-// The provided CONTACT_INFO data with added href links
 const CONTACT_INFO = [
   {
     icon: FaMapPin,
