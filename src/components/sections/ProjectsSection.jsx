@@ -1,18 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLink } from "react-icons/fa";
-
-// Import your theme hook with the correct path
 import { useTheme } from "../../context/ThemeContext.jsx";
-
-// Import your project images from the assets folder
-// Adjust filenames and paths as needed
 import PROJECT_IMG_1 from "../../assets/images/PROJECT_IMG_1.png";
 import PROJECT_IMG_2 from "../../assets/images/PROJECT_IMG_2.png";
 import PROJECT_IMG_4 from "../../assets/images/PROJECT_IMG_4.png";
 import PROJECT_IMG_5 from "../../assets/images/PROJECT_IMG_5.png";
 
-// The PROJECTS data is now included directly in this file
 const PROJECTS = [
   {
     id: 1,

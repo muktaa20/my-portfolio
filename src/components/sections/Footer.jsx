@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaHeart } from 'react-icons/fa';
 
-// Social Media Links
 const SOCIAL_LINKS = [
   { icon: FaGithub, url: "https://github.com/your-username" },
   { icon: FaLinkedin, url: "https://www.linkedin.com/in/your-profile" },
@@ -26,7 +25,6 @@ export default function Footer() {
       }`}
     >
       <div className="container mx-auto px-6 max-w-5xl">
-        {/* Logo and Tagline */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-10">
           <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
             <motion.h2
@@ -80,19 +78,6 @@ export default function Footer() {
             })}
           </div>
         </div>
-
-        {/* Divider with Heart */}
-        <motion.div
-          className="flex items-center justify-center space-x-2 my-8"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <div className={`h-px w-24 md:w-32 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`} />
-          <FaHeart className="text-red-500 text-lg animate-pulse" />
-          <div className={`h-px w-24 md:w-32 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`} />
-        </motion.div>
       </div>
     </footer>
   );

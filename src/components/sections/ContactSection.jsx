@@ -9,19 +9,19 @@ const CONTACT_INFO = [
     icon: FaMapPin,
     label: "Location",
     value: "Burhanpu",
-    href: "https://maps.google.com/?q=Burhanpur" // Use "https://maps.google.com/?q=" for a link to Google Maps
+    href: "https://maps.google.com/?q=Burhanpur" 
   },
   {
     icon: FaEnvelope,
     label: "Email",
     value: "muktasuryavanshi48@gmail.com",
-    href: "mailto:muktasuryavanshi48@gmail.com" // Use "mailto:" to open the default email client
+    href: "mailto:muktasuryavanshi48@gmail.com" 
   },
   {
     icon: FaPhone,
     label: "Phone",
     value: "+91 9302945768",
-    href: "tel:+919302945768" // Use "tel:" to open the phone dialer
+    href: "tel:+919302945768" 
   },
 ];
 
@@ -78,9 +78,9 @@ export default function ContactSection() {
               <a 
                 href={item.href}
                 key={index}
-                target="_blank" // Opens the link in a new tab
-                rel="noopener noreferrer" // Recommended for security
-                className="block" // Make the a-tag a block element to fill the container
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="block" 
               >
                 <motion.div
                   className={`flex flex-col items-center text-center p-6 cursor-pointer transition-transform duration-300 hover:scale-105 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
