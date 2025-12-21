@@ -65,7 +65,7 @@ export default function SkillsSection() {
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 py-16">
         {/* Heading */}
         <h2 className="text-4xl font-bold text-center mb-12">My Skills</h2>
 
