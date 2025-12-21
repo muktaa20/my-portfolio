@@ -172,7 +172,7 @@ const PROJECTS = [
     image: PROJECT_IMG_2,
     tags: ["HTML","CSS","Javascript","React.js", "Supabase"],
     liveUrl: "https://your-live-link.com",
-    githubUrl: "https://github.com/muktaa20/chat-app",
+    githubUrl: "https://github.com/muktaa20/react-chat-app",
   }
 ];
 
