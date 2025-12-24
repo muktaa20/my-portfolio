@@ -251,14 +251,7 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <motion.div variants={itemVariants} className="flex gap-6 mb-8">
-              {/* <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => scrollToSection("work")}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300"
-              >
-                Resume
-              </motion.button> */}
+              
               <motion.button
   whileHover={{ y: -2 }}
   whileTap={{ scale: 0.98 }}
