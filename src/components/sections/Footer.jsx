@@ -6,7 +6,6 @@ import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaHeart } from 'react-icon
 const SOCIAL_LINKS = [
   { icon: FaGithub, url: "https://github.com/your-username" },
   { icon: FaLinkedin, url: "https://www.linkedin.com/in/your-profile" },
-  { icon: FaTwitter, url: "https://twitter.com/your-username" },
   { icon: FaEnvelope, url: "mailto:your-email@example.com" },
 ];
 
