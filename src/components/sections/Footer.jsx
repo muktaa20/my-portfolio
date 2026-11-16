@@ -1,81 +1,73 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaHeart } from 'react-icons/fa';
+import { motion } from "framer-motion";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const SOCIAL_LINKS = [
-  { icon: FaGithub, url: "https://github.com/your-username" },
-  { icon: FaLinkedin, url: "https://www.linkedin.com/in/your-profile" },
-  { icon: FaEnvelope, url: "mailto:your-email@example.com" },
+  { icon: FaGithub, url: "https://github.com/muktaa20", label: "GitHub" },
+  {
+    icon: FaLinkedin,
+    url: "https://www.linkedin.com/in/mukta-s-632760335/",
+    label: "LinkedIn",
+  },
+  { icon: FaEnvelope, url: "mailto:muktasuryavanshi48@gmail.com", label: "Email" },
 ];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
-};
+const NAV_LINKS = [
+  { label: "Home", id: "home" },
+  { label: "Skills", id: "skills" },
+  { label: "Work", id: "projects" },
+  { label: "Certificates", id: "certificates" },
+  { label: "About", id: "about" },
+  { label: "Contact", id: "contact" },
+];
 
 export default function Footer() {
-  const { isDarkMode } = useTheme();
+  const scrollToSection = (id) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <footer
-      className={`py-12 md:py-16 transition-colors duration-500 text-center ${
-        isDarkMode ? "bg-gray-900 text-gray-400" : "bg-white text-gray-600"
-      }`}
-    >
-      <div className="container mx-auto px-6 max-w-5xl">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-10">
-          <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
-            <motion.h2
-              className={`text-2xl font-bold ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
+    <footer className="border-t border-slate-200 py-12 dark:border-white/10">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+          <div className="text-center md:text-left">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
               <span className="text-blue-500">&lt;/&gt;</span> Mukta Suryavanshi
-            </motion.h2>
-            <motion.p
-              className={`mt-2 text-sm md:text-base ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              Turning ideas into delightful digital experiences ✨
-            </motion.p>
+            </h2>
+            <p className="mt-2 max-w-xs text-sm text-slate-500 dark:text-slate-400">
+              Turning ideas into simple, useful websites.
+            </p>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex justify-center md:justify-end space-x-6">
-            {SOCIAL_LINKS.map((link, index) => {
-              const IconComponent = link.icon;
-              return (
-                <motion.a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={IconComponent.name}
-                  className={`text-2xl transition-transform transform hover:scale-110 ${
-                    isDarkMode
-                      ? 'text-gray-300 hover:text-white'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                  variants={itemVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                >
-                  <IconComponent />
-                </motion.a>
-              );
-            })}
+          <nav aria-label="Footer" className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollToSection(link.id)}
+                className="text-sm text-slate-600 transition hover:text-blue-500 dark:text-slate-400 dark:hover:text-white"
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex gap-3">
+            {SOCIAL_LINKS.map(({ icon: Icon, url, label }) => (
+              <motion.a
+                key={label}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                whileHover={{ y: -3 }}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 ring-1 ring-slate-200 transition hover:text-blue-500 hover:ring-blue-500/40 dark:text-slate-400 dark:ring-white/10 dark:hover:text-white"
+              >
+                <Icon size={18} />
+              </motion.a>
+            ))}
           </div>
+        </div>
+
+        <div className="mt-10 border-t border-slate-200 pt-6 text-center text-sm text-slate-500 dark:border-white/10 dark:text-slate-500">
+          © {new Date().getFullYear()} Mukta Suryavanshi. All rights reserved.
         </div>
       </div>
     </footer>

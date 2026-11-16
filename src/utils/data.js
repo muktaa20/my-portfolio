@@ -1,34 +1,17 @@
+import CERT_REACT from "../assets/images/cert_1.jpeg";
+import CERT_FRONTEND from "../assets/images/cert_2.jpeg";
 import {
   Code2,
   GraduationCap,
   Briefcase,
-  Award,
-  Rocket,
   Heart,
   Coffee,
   BookOpen,
-  Zap,
-  Database,
-  Server,
-  Cloud,
   Mail,
   MapPin,
-  Phone,
 } from "lucide-react";
 
-import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
-
-import PROJECT_IMG_1 from "../assets/images/PROJECT_IMG_1.png";
-import PROJECT_IMG_2 from "../assets/images/PROJECT_IMG_2.png";
-import PROJECT_IMG_3 from "../assets/images/PROJECT_IMG_3.png";
-import PROJECT_IMG_4 from "../assets/images/PROJECT_IMG_4.png";
-import PROJECT_IMG_5 from "../assets/images/PROJECT_IMG_5.png";
-import PROJECT_IMG_6 from "../assets/images/PROJECT_IMG_6.png";
-
-
-
-
-
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 
 export const JOURNEY_STEPS = [
   {
@@ -82,21 +65,21 @@ export const SOCIAL_LINKS = [
   {
     name: "GitHub",
     icon: FiGithub,
-    url: "https://github.com",
+    url: "https://github.com/muktaa20",
     color: "hover:text-gray-400",
     bgColor: "hover:bg-gray-800",
   },
   {
     name: "LinkedIn",
     icon: FiLinkedin,
-    url: "https://linkedin.com",
+    url: "https://www.linkedin.com/in/mukta-s-632760335/",
     color: "hover:text-blue-400",
     bgColor: "hover:bg-blue-500/10",
   },
   {
     name: "Email",
     icon: Mail,
-    url: "mailto:alex@example.com",
+    url: "mailto:muktasuryavanshi48@gmail.com",
     color: "hover:text-green-400",
     bgColor: "hover:bg-green-500/10",
   },
@@ -106,22 +89,28 @@ export const CONTACT_INFO = [
   {
     icon: MapPin,
     label: "Location",
-    value: "San Francisco, CA",
+    value: "Burhanpur, India",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "alex@timetoprogram.com",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
+    value: "muktasuryavanshi48@gmail.com",
   },
 ];
 
-
-
-
-
-
+export const CERTIFICATES = [
+  {
+    id: "RFM-0042-25",
+    title: "React Crash Course",
+    issuer: "Progression School",
+    date: "Apr 2025",
+    image: CERT_REACT,
+  },
+  {
+    id: "FWD-0057-25",
+    title: "Frontend Web Development Crash Course",
+    issuer: "Progression School",
+    date: "Apr 2025",
+    image: CERT_FRONTEND,
+  },
+];

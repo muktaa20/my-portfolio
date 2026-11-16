@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGithub, FaLink } from "react-icons/fa";
-import { useTheme } from "../../context/ThemeContext.jsx";
+import { FaGithub } from "react-icons/fa";
+import { ExternalLink, X } from "lucide-react";
 
 import PROJECT_IMG_1 from "../../assets/images/PROJECT_IMG_1.png";
 import PROJECT_IMG_2 from "../../assets/images/PROJECT_IMG_2.png";
@@ -11,9 +11,9 @@ const PROJECTS = [
     id: 1,
     title: "Health-Connect",
     description:
-      "A platform that connects patients and healthcare providers. It could be a simple appointment booking system or a more comprehensive solution for online consultations and health record management.",
+      "A website where patients can find doctors, book appointments, consult online and keep their health records in one place. It works well on mobile and desktop.",
     image: PROJECT_IMG_1,
-    tags: ["HTML","CSS","Javascript","React", "Tailwind"],
+    tags: ["HTML", "CSS", "JavaScript", "React", "Tailwind"],
     liveUrl: "https://healthconnectapp1.netlify.app/",
     githubUrl: "https://github.com/muktaa20/Health-Connect",
   },
@@ -21,148 +21,158 @@ const PROJECTS = [
     id: 2,
     title: "Real-Time Chat Application",
     description:
-      "A modern real-time chat application that allows users to send and receive messages instantly with a clean, responsive, and user-friendly interface.",
+      "A chat app where users can send and receive messages instantly. Built with React, with Supabase storing the messages.",
     image: PROJECT_IMG_2,
-    tags: ["HTML","CSS","Javascript","React.js", "Supabase"],
+    tags: ["HTML", "CSS", "JavaScript", "React.js", "Supabase"],
     liveUrl: "https://your-live-link.com",
     githubUrl: "https://github.com/muktaa20/react-chat-app",
-  }
+  },
 ];
 
+const Tag = ({ children }) => (
+  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-white/5 dark:text-slate-300">
+    {children}
+  </span>
+);
+
 export default function ProjectsSection() {
-  const { isDarkMode } = useTheme();
   const [selectedProject, setSelectedProject] = useState(null);
 
-  return (
-    <section
-      id="projects"
-      className={`py-12 relative overflow-hidden transition-colors duration-500
-      ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}
-    >
-      <div className="container mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">My Projects</h2>
+  useEffect(() => {
+    if (!selectedProject) return;
+    const onKey = (e) => e.key === "Escape" && setSelectedProject(null);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [selectedProject]);
 
-        {/* GRID VIEW */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  return (
+    <section id="projects" className="bg-grid-glow py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="mb-16 text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-blue-500">
+            What I have built
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            My <span className="text-gradient">Projects</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {PROJECTS.map((project, index) => (
-            <motion.div
-              key={index}
+            <motion.article
+              key={project.id}
               onClick={() => setSelectedProject(project)}
-              className={`rounded-lg shadow-lg cursor-pointer h-80 
-              ${isDarkMode ? "bg-gray-800" : "bg-white"}`}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/10 dark:bg-white/[0.03]"
             >
-              {/* FIXED PROJECT IMAGE IN GRID */}
-              <div className="w-full h-[200px] p-3 rounded-t-lg overflow-hidden flex items-center justify-center bg-white/5">
+              <div className="relative flex h-52 items-center justify-center overflow-hidden bg-slate-50 p-4 dark:bg-white/[0.02]">
                 <img
                   src={project.image}
-                  alt={project.title}
-                  className="max-w-full max-h-full object-contain rounded-md"
+                  alt={`${project.title} preview`}
+                  loading="lazy"
+                  className="max-h-full max-w-full rounded-lg object-contain transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-blue-600/0 opacity-0 transition group-hover:bg-blue-600/10 group-hover:opacity-100">
+                  <span className="rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow">
+                    View details
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <h3 className="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+                  {project.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedProject.title} details`}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#0d0d14]"
+            >
+              <button
+                onClick={() => setSelectedProject(null)}
+                aria-label="Close dialog"
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="mb-6 flex h-72 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-white/5 dark:bg-white/[0.02]">
+                <img
+                  src={selectedProject.image}
+                  alt={`${selectedProject.title} preview`}
+                  className="max-h-full max-w-full rounded-lg object-contain"
                 />
               </div>
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
+              <h2 className="mb-3 text-2xl font-bold text-slate-900 dark:text-white">
+                {selectedProject.title}
+              </h2>
+              <p className="mb-6 leading-relaxed text-slate-600 dark:text-slate-400">
+                {selectedProject.description}
+              </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className={`text-xs px-2 py-1 rounded-full
-                      ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              <div className="mb-8 flex flex-wrap gap-2">
+                {selectedProject.tags.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={selectedProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
+                >
+                  <ExternalLink size={16} /> Live Demo
+                </a>
+                <a
+                  href={selectedProject.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 transition hover:ring-slate-400 dark:text-slate-200 dark:ring-white/15 dark:hover:ring-white/30"
+                >
+                  <FaGithub size={16} /> View Code
+                </a>
               </div>
             </motion.div>
-          ))}
-        </div>
-
-        {/* MODAL PREVIEW */}
-        <AnimatePresence>
-          {selectedProject && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
-            >
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-                className={`max-w-3xl w-full mx-4 p-6 rounded-xl relative
-                ${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
-                style={{ maxHeight: "90vh", overflowY: "auto" }}
-              >
-                {/* Close Button */}
-                <button
-                  className="absolute top-4 right-4 text-2xl"
-                  onClick={() => setSelectedProject(null)}
-                >
-                  ✕
-                </button>
-
-                {/* FIXED MODAL IMAGE */}
-                <div className="w-full h-[420px] p-4 rounded-xl overflow-hidden border border-gray-700/20 flex items-center justify-center mb-6">
-                  <img
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="max-w-full max-h-full object-contain rounded-lg"
-                  />
-                </div>
-
-                {/* TITLE */}
-                <h2 className="text-2xl font-bold mb-4">
-                  {selectedProject.title}
-                </h2>
-
-                {/* DESCRIPTION */}
-                <p className="mb-6 opacity-80">
-                  {selectedProject.description}
-                </p>
-
-                {/* TAGS */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {selectedProject.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className={`text-xs px-3 py-1 rounded-full
-                      ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* BUTTONS */}
-                <div className="flex gap-4 justify-between">
-                  <a
-                    href={selectedProject.liveUrl}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white"
-                    target="_blank"
-                  >
-                    <FaLink /> Live Demo
-                  </a>
-
-                  <a
-                    href={selectedProject.githubUrl}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 text-white"
-                    target="_blank"
-                  >
-                    <FaGithub /> GitHub
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
