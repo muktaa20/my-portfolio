@@ -37,6 +37,13 @@
     <title>Mukta Suryavanshi — Front-End Developer</title>
   </head>
   <body>
+    <!-- Lets Netlify detect the React contact form at deploy time. Field names must match ContactForm.jsx. -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+      <input name="bot-field" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

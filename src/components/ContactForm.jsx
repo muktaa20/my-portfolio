@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle, X } from "lucide-react";
 
 const EMAIL = "muktasuryavanshi48@gmail.com";
-// Optional: free key from https://web3forms.com in .env as VITE_WEB3FORMS_KEY.
-// Without it, messages go through formsubmit.co (first message sends you a one-time activation email).
+// Messages are handled by Netlify Forms (see the hidden form in index.html).
+// Optional: set VITE_WEB3FORMS_KEY to send through Web3Forms instead (also works on localhost).
 const ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 const inputClass =
@@ -18,19 +18,27 @@ export default function ContactForm() {
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const send = async () => {
-    const subject = `Portfolio message from ${form.name}`;
-    // Web3Forms if a key is configured, otherwise FormSubmit (no key needed).
-    const [url, payload] = ACCESS_KEY
-      ? ["https://api.web3forms.com/submit", { access_key: ACCESS_KEY, subject, ...form }]
-      : [`https://formsubmit.co/ajax/${EMAIL}`, { _subject: subject, _template: "table", _captcha: "false", ...form }];
-    const res = await fetch(url, {
+    if (ACCESS_KEY) {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: ACCESS_KEY, subject: `Portfolio message from ${form.name}`, ...form }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error(data.message || `Request failed (${res.status})`);
+      return;
+    }
+
+    if (import.meta.env.DEV) {
+      throw new Error("Netlify Forms only works on the live site, not on localhost.");
+    }
+
+    const res = await fetch("/", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ "form-name": "contact", "bot-field": "", ...form }).toString(),
     });
-    const data = await res.json().catch(() => ({}));
-    const ok = res.ok && (data.success === true || data.success === "true");
-    if (!ok) throw new Error(data.message || `Request failed (${res.status})`);
+    if (!res.ok) throw new Error(`Request failed (${res.status})`);
   };
 
   const handleSubmit = async (e) => {
@@ -42,13 +50,10 @@ export default function ContactForm() {
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
       console.error("Contact form error:", err);
-      const activation = /activat/i.test(err.message);
       setErrorMsg(
-        activation
-          ? "The form is not working right now. Please email me at"
-          : err.message === "Failed to fetch"
-            ? "Network error. Check your connection and try again."
-            : `Couldn't send your message: ${err.message}`
+        err.message === "Failed to fetch"
+          ? "Network error. Check your connection and try again. Or email me at"
+          : `Couldn't send your message (${err.message}). Please email me at`
       );
       setStatus("error");
     }
