@@ -1,362 +1,205 @@
+import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown, FileText, Mail } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
-import { useTheme } from "../../context/ThemeContext";
-
-import PROFILE_PIC from "../../assets/images/mukta.jpg";
 import { containerVariants, itemVariants } from "../../utils/helper";
+import PROFILE_PIC from "../../assets/images/mukta.jpg";
+
+const SOCIALS = [
+  { icon: FiGithub, href: "https://github.com/muktaa20", label: "GitHub" },
+  {
+    icon: FiLinkedin,
+    href: "https://www.linkedin.com/in/mukta-s-632760335/",
+    label: "LinkedIn",
+  },
+  {
+    icon: Mail,
+    href: "https://mail.google.com/mail/u/0/#inbox?compose=new",
+    label: "Email",
+  },
+];
+
+const scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+};
+
+const SocialLinks = () => (
+  <div className="flex gap-3">
+    {SOCIALS.map(({ icon: Icon, href, label }) => (
+      <motion.a
+        key={label}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={label}
+        whileHover={{ y: -3 }}
+        className="flex h-11 w-11 items-center justify-center rounded-full text-slate-500 ring-1 ring-slate-200 transition hover:text-blue-500 hover:ring-blue-500/40 dark:text-slate-400 dark:ring-white/10 dark:hover:text-white"
+      >
+        <Icon size={20} />
+      </motion.a>
+    ))}
+  </div>
+);
 
 const HeroSection = () => {
-  const { isDarkMode } = useTheme();
-
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 500], [0, -100]);
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const textVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const imageVariants = {
-    hidden: { x: 50, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { duration: 1, ease: "easeOut", delay: 0.5 },
-    },
-  };
+  const heroY = useTransform(scrollY, [0, 500], [0, -80]);
 
   return (
-    <div
-      className={`min-h-screen transition-all duration-500 relative ${
-        isDarkMode ? "bg-gray-950 text-white" : "bg-gray-50 text-gray-900"
-      }`}
+    <section
+      id="home"
+      className="relative flex min-h-screen items-center overflow-hidden bg-grid-glow pt-24 pb-16"
     >
-      {/* Background Section with Animations */}
-      <motion.section
-        id="home"
-        style={{ y: heroY }}
-        className="min-h-screen absolute inset-0 flex items-center justify-center px-6 pt-10"
-      >
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            animate={{ scale: [1, 1.1, 1], rotate: [0, 180, 360] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className={`absolute top-20 right-20 w-64 h-64 rounded-full blur-3xl opacity-40 ${
-              isDarkMode ? "bg-blue-500" : "bg-blue-400"
-            }`}
-          />
-          <motion.div
-            animate={{ scale: [1.1, 1, 1.1], rotate: [360, 180, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className={`absolute bottom-20 left-20 w-48 h-48 rounded-full blur-3xl opacity-10 ${
-              isDarkMode ? "bg-purple-500" : "bg-purple-400"
-            }`}
-          />
-        </div>
-      </motion.section>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto w-full z-10 relative flex items-center min-h-screen pt-20">
-        {/* Mobile Layout */}
-        <div className="block lg:hidden w-full px-6">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="text-center"
-          >
-            {/* Profile Image - Mobile */}
-            <motion.div variants={imageVariants} className="mb-8">
-              <div className="w-32 h-32 mx-auto relative">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className={`w-full h-32 rounded-2xl overflow-hidden border-4 ${
-                    isDarkMode ? "border-gray-800" : "border-gray-300"
-                  } shadow-2xl`}
-                >
-                  <img
-                    src={PROFILE_PIC}
-                    alt="Profile"
-                    className="object-cover w-full h-full"
-                  />
-                </motion.div>
-
-                {/* Decorative ring */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-2 rounded-2xl border border-blue-500/20"
-                />
-              </div>
-            </motion.div>
-
-            {/* Title */}
-            <motion.div
-              variants={textVariants}
-              className={`text-sm uppercase tracking-widest ${
-                isDarkMode ? "text-gray-500" : "text-gray-600"
-              } mb-4`}
-            >
-              Front End Developer
-            </motion.div>
-
-            <motion.h1
-              variants={itemVariants}
-              className="text-3xl md:text-5xl font-light mb-6 leading-tight"
-            >
-              <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                Building digital
-              </span>
-              <span className="text-blue-500 font-medium ml-2">experiences</span>
-              <br />
-              <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                that matter
-              </span>
-            </motion.h1>
-
-            <motion.p
-              variants={itemVariants}
-              className={`text-base md:text-lg ${
-                isDarkMode ? "text-gray-400" : "text-gray-800"
-              } mb-8 max-w-xl mx-auto font-light leading-relaxed`}
-            >
-              I craft beautiful, functional web applications with modern
-              technologies and thoughtful user experiences.
-            </motion.p>
-
-            {/* CTA Buttons - Mobile */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
-            >
-              {/* <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                 onClick={() => scrollToSection("work")}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300"
-              >
-                Resume
-              </motion.button> */}
-
-              <motion.button
-  whileHover={{ y: -2 }}
-  whileTap={{ scale: 0.98 }}
-  onClick={() => window.open("/resume.pdf", "_blank")}
-  className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300"
->
-  Resume
-</motion.button>
-
-              <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => scrollToSection("contact")}
-                className={`border ${
-                  isDarkMode
-                    ? "border-gray-700 hover:border-gray-600 text-gray-300"
-                    : "border-gray-300 hover:border-gray-400 text-gray-700"
-                } px-8 py-3 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300`}
-              >
-                Get in Touch
-              </motion.button>
-            </motion.div>
-
-            {/* Social icons - Mobile */}
-            <motion.div
-              variants={itemVariants}
-              className="flex justify-center space-x-6 mb-8"
-            >
-              {[
-                { icon: FiGithub, href: "https://github.com/muktaa20" },
-                {
-                  icon: FiLinkedin,
-                  href: "https://www.linkedin.com/in/mukta-s-632760335/",
-                },
-                {
-                  icon: Mail,
-                  href: "https://mail.google.com/mail/u/0/#inbox?compose=new",
-                },
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  whileHover={{ y: -3, scale: 1.1 }}
-                  className={`p-3 rounded-full transition-colors ${
-                    isDarkMode
-                      ? "text-gray-400 hover:text-white hover:bg-gray-800"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-                  }`}
-                >
-                  <social.icon size={20} />
-                </motion.a>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center w-full px-6">
-          {/* Left Content */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="text-left"
-          >
-            <motion.div
-              variants={itemVariants}
-              className={`text-sm uppercase tracking-widest ${
-                isDarkMode ? "text-gray-500" : "text-gray-600"
-              } mb-6`}
-            >
-              Front End Developer
-            </motion.div>
-
-            <motion.h1
-              variants={itemVariants}
-              className="text-5xl xl:text-7xl font-light mb-8 leading-tight"
-            >
-              <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                Building Digital
-              </span>
-              <br />
-              <span className="text-blue-500 font-medium"> experiences</span>
-              <br />
-              <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                that matter
-              </span>
-            </motion.h1>
-
-            <motion.p
-              variants={itemVariants}
-              className={`text-xl ${
-                isDarkMode ? "text-gray-400" : "text-gray-600"
-              } mb-12 font-light leading-relaxed max-w-lg`}
-            >
-              I craft beautiful, functional web applications with modern
-              technologies and thoughtful user experiences.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex gap-6 mb-8">
-              
-              <motion.button
-  whileHover={{ y: -2 }}
-  whileTap={{ scale: 0.98 }}
-  onClick={() => window.open("/resume.pdf", "_blank")}
-  className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300"
->
-  Resume
-</motion.button>
-
-              <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => scrollToSection("contact")}
-                className={`border ${
-                  isDarkMode
-                    ? "border-gray-700 hover:border-gray-600 text-gray-300"
-                    : "border-gray-300 hover:border-gray-400 text-gray-700"
-                } px-8 py-4 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300`}
-              >
-                Get in Touch
-              </motion.button>
-            </motion.div>
-
-            {/* Social links */}
-            <motion.div variants={itemVariants} className="flex space-x-6 mb-12">
-              {[
-                { icon: FiGithub, href: "https://github.com/muktaa20" },
-                {
-                  icon: FiLinkedin,
-                  href: "https://www.linkedin.com/in/mukta-s-632760335/",
-                },
-                {
-                  icon: Mail,
-                  href: "https://mail.google.com/mail/u/0/#inbox?compose=new",
-                },
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  whileHover={{ y: -3, scale: 1.1 }}
-                  className={`p-3 rounded-full transition-colors ${
-                    isDarkMode
-                      ? "text-gray-400 hover:text-white hover:bg-gray-800"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-                  }`}
-                >
-                  <social.icon size={20} />
-                </motion.a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right Profile Image */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={imageVariants}
-            className="flex justify-center lg:justify-end"
-          >
-            <div className="relative">
-              {/* Tech Stack - Desktop (Cleaned) */}
-              
-
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className={`w-80 h-96 rounded-3xl overflow-hidden border-4 ${
-                  isDarkMode ? "border-gray-800" : "border-gray-300"
-                } shadow-2xl`}
-              >
-                <img
-                  src={PROFILE_PIC}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-
-              {/* Decorative Rings */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-4 rounded-3xl border border-blue-500/20"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-8 rounded-3xl border border-purple-500/10"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <ArrowDown
-          size={20}
-          className={isDarkMode ? "text-gray-600" : "text-gray-400"}
+      {/* Ambient animated glow */}
+      <motion.div style={{ y: heroY }} className="pointer-events-none absolute inset-0">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+          className="absolute right-[10%] top-24 h-64 w-64 rounded-full bg-blue-500/30 blur-3xl"
+        />
+        <motion.div
+          animate={{ scale: [1.1, 1, 1.1], rotate: [360, 180, 0] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-24 left-[8%] h-56 w-56 rounded-full bg-indigo-500/20 blur-3xl"
         />
       </motion.div>
-    </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-2 lg:gap-16">
+        {/* Text content */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="text-center lg:text-left"
+        >
+          <motion.span
+            variants={itemVariants}
+            className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-blue-500 ring-1 ring-blue-500/20"
+          >
+            <TypingText />
+          </motion.span>
+
+          <motion.h1
+            variants={itemVariants}
+            className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl xl:text-6xl dark:text-white"
+          >
+            I build{" "}
+            <span className="text-gradient">websites</span>
+            <br className="hidden sm:block" /> that are easy to use.
+          </motion.h1>
+
+          <motion.p
+            variants={itemVariants}
+            className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-600 lg:mx-0 dark:text-slate-400"
+          >
+            I make fast, clean and responsive websites using HTML, CSS,
+            JavaScript, React and Tailwind CSS.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className="mt-9 flex flex-col items-center gap-4 sm:flex-row lg:items-start lg:justify-start"
+          >
+            <motion.button
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => window.open("/resume.pdf", "_blank")}
+              className="inline-flex items-center gap-2 rounded-full bg-blue-500 px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-600"
+            >
+              <FileText size={16} /> Resume
+            </motion.button>
+
+            <motion.button
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => scrollToSection("contact")}
+              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold uppercase tracking-wider text-slate-700 ring-1 ring-slate-300 transition hover:ring-slate-400 dark:text-slate-200 dark:ring-white/15 dark:hover:ring-white/30"
+            >
+              Contact Me
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            className="mt-10 flex justify-center lg:justify-start"
+          >
+            <SocialLinks />
+          </motion.div>
+        </motion.div>
+
+        {/* Profile image */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.3 }}
+          className="flex justify-center lg:justify-end"
+        >
+          <div className="relative">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="relative h-72 w-60 overflow-hidden rounded-[2rem] ring-1 ring-slate-200 shadow-2xl sm:h-96 sm:w-80 dark:ring-white/10"
+            >
+              <img
+                src={PROFILE_PIC}
+                alt="Portrait of Mukta Suryavanshi"
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-4 rounded-[2.5rem] border border-blue-500/20"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-8 rounded-[3rem] border border-indigo-500/10"
+            />
+          </div>
+        </motion.div>
+      </div>
+
+      <motion.button
+        onClick={() => scrollToSection("skills")}
+        aria-label="Scroll to skills"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-400 transition hover:text-blue-500 dark:text-slate-600"
+      >
+        <ArrowDown size={22} />
+      </motion.button>
+    </section>
   );
 };
+
+const ROLES = ["Front-End Developer", "React Developer", "MERN Stack Learner"];
+
+function TypingText() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const full = ROLES[roleIndex];
+    let delay = deleting ? 45 : 90;
+    if (!deleting && text === full) delay = 1600;
+    const t = setTimeout(() => {
+      if (!deleting && text === full) setDeleting(true);
+      else if (deleting && text === "") {
+        setDeleting(false);
+        setRoleIndex((i) => (i + 1) % ROLES.length);
+      } else setText(full.slice(0, text.length + (deleting ? -1 : 1)));
+    }, delay);
+    return () => clearTimeout(t);
+  }, [text, deleting, roleIndex]);
+
+  return (
+    <span aria-label={ROLES[roleIndex]}>
+      {text}
+      <span className="ml-0.5 inline-block w-[2px] animate-pulse bg-blue-500">&nbsp;</span>
+    </span>
+  );
+}
 
 export default HeroSection;

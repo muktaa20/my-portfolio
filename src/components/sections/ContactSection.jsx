@@ -1,39 +1,27 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "../../context/ThemeContext";
-
-import { FaMapPin, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { MapPin, Mail } from "lucide-react";
+import ContactForm from "../ContactForm";
 
 const CONTACT_INFO = [
   {
-    icon: FaMapPin,
+    icon: MapPin,
     label: "Location",
-    value: "Burhanpu",
-    href: "https://maps.google.com/?q=Burhanpur" 
+    value: "Burhanpur, India",
+    href: "https://maps.google.com/?q=Burhanpur",
   },
   {
-    icon: FaEnvelope,
+    icon: Mail,
     label: "Email",
     value: "muktasuryavanshi48@gmail.com",
-    href: "mailto:muktasuryavanshi48@gmail.com" 
-  },
-  {
-    icon: FaPhone,
-    label: "Phone",
-    value: "+91 9302945768",
-    href: "tel:+919302945768" 
+    href: "mailto:muktasuryavanshi48@gmail.com",
   },
 ];
 
 const containerVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
   },
 };
 
@@ -43,61 +31,58 @@ const itemVariants = {
 };
 
 export default function ContactSection() {
-  const { isDarkMode } = useTheme();
-
   return (
-    <section
-      id="contact"
-      className={`py-16 md:py-24 transition-colors duration-500 ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-800"}`}
-    >
-      <div className="container mx-auto px-6 max-w-4xl">
+    <section id="contact" className="py-20 sm:py-28">
+      <div className="mx-auto max-w-4xl px-6">
         <motion.div
-          className="text-center mb-12"
+          className="mb-14 text-center"
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className={`text-sm md:text-base font-semibold tracking-widest uppercase mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-            GET IN TOUCH
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-blue-500">
+            Let&apos;s talk
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-            Contact <span className="text-blue-500">Me</span>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            Contact <span className="text-gradient">Me</span>
           </h2>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
+            Have a project or a job opening? Or just want to say hi? Send me a
+            message and I will reply soon.
+          </p>
         </motion.div>
 
         <motion.div
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8 md:p-12 rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          {CONTACT_INFO.map((item, index) => {
-            const IconComponent = item.icon;
-            return (
-              <a 
-                href={item.href}
-                key={index}
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="block" 
-              >
-                <motion.div
-                  className={`flex flex-col items-center text-center p-6 cursor-pointer transition-transform duration-300 hover:scale-105 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                  variants={itemVariants}
-                >
-                  <div className={`text-3xl mb-4 p-4 rounded-full ${isDarkMode ? 'bg-gray-700 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
-                    <IconComponent />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{item.label}</h3>
-                  <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {item.value}
-                  </p>
-                </motion.div>
-              </a>
-            );
-          })}
+          {CONTACT_INFO.map(({ icon: Icon, label, value, href }) => (
+            <motion.a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={itemVariants}
+              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-lg dark:border-white/10 dark:bg-white/[0.03]"
+            >
+              <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10 text-blue-500 ring-1 ring-blue-500/20 transition group-hover:scale-105">
+                <Icon size={24} />
+              </span>
+              <h3 className="mb-1 text-base font-semibold text-slate-900 dark:text-white">
+                {label}
+              </h3>
+              <p className="break-words text-sm text-slate-600 dark:text-slate-400">
+                {value}
+              </p>
+            </motion.a>
+          ))}
         </motion.div>
+
+        <ContactForm />
       </div>
     </section>
   );
