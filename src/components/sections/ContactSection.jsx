@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { MapPin, Mail } from "lucide-react";
-import ContactForm from "../ContactForm";
 
 const CONTACT_INFO = [
   {
@@ -48,8 +47,8 @@ export default function ContactSection() {
             Contact <span className="text-gradient">Me</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-            Have a project or a job opening? Or just want to say hi? Send me a
-            message and I will reply soon.
+            Have a project or a job opening? Or just want to say hi? Email me or
+            message me on LinkedIn and I will reply soon.
           </p>
         </motion.div>
 
@@ -81,8 +80,6 @@ export default function ContactSection() {
             </motion.a>
           ))}
         </motion.div>
-
-        <ContactForm />
       </div>
     </section>
   );
