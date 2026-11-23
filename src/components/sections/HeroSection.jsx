@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, FileText, Mail } from "lucide-react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDown, Download, FileText, Mail, X } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { containerVariants, itemVariants } from "../../utils/helper";
 import PROFILE_PIC from "../../assets/images/mukta.jpg";
@@ -44,6 +44,26 @@ const SocialLinks = () => (
 const HeroSection = () => {
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, -80]);
+  const [showResume, setShowResume] = useState(false);
+
+  useEffect(() => {
+    if (!showResume) return;
+    const onKey = (e) => e.key === "Escape" && setShowResume(false);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [showResume]);
+
+  // Many phone browsers can't display a PDF in a tab, so show an image preview there.
+  const openResume = (e) => {
+    if (window.matchMedia("(max-width: 1023px)").matches) {
+      e.preventDefault();
+      setShowResume(true);
+    }
+  };
 
   return (
     <section
@@ -100,14 +120,17 @@ const HeroSection = () => {
             variants={itemVariants}
             className="mt-9 flex flex-col items-center gap-4 sm:flex-row lg:items-start lg:justify-start"
           >
-            <motion.button
+            <motion.a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => window.open("/resume.pdf", "_blank")}
+              onClick={openResume}
               className="inline-flex items-center gap-2 rounded-full bg-blue-500 px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-600"
             >
               <FileText size={16} /> Resume
-            </motion.button>
+            </motion.a>
 
             <motion.button
               whileHover={{ y: -2 }}
@@ -169,6 +192,44 @@ const HeroSection = () => {
       >
         <ArrowDown size={22} />
       </motion.button>
+
+      <AnimatePresence>
+        {showResume && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Resume preview"
+            className="fixed inset-0 z-[70] flex flex-col bg-black/90"
+          >
+            <div className="flex items-center justify-between gap-3 p-3">
+              <a
+                href="/resume.pdf"
+                download="Mukta_Suryavanshi_Resume.pdf"
+                className="inline-flex items-center gap-2 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white"
+              >
+                <Download size={16} /> Download PDF
+              </a>
+              <button
+                onClick={() => setShowResume(false)}
+                aria-label="Close resume"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto px-3 pb-3">
+              <img
+                src="/resume-preview.png"
+                alt="Resume of Mukta Suryavanshi"
+                className="mx-auto w-full max-w-2xl rounded bg-white"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
