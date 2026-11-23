@@ -14,6 +14,8 @@ const NAV_ITEMS = [
   { label: "Contact", id: "contact" },
 ];
 
+const NAV_OFFSET = 72;
+
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,6 +23,7 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("home");
 
   const sections = useRef(NAV_ITEMS.map((item) => item.id));
+  const pendingSection = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -54,12 +57,27 @@ const Navbar = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const scrollToSection = (id) => {
+  const scrollNow = (id) => {
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (!element) return;
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: id === "home" ? 0 : top - NAV_OFFSET, behavior: "smooth" });
+  };
+
+  // Closing the mobile menu cancels a scroll started at the same time,
+  // so wait for its exit animation to finish.
+  const scrollToSection = (id) => {
+    if (isMenuOpen) {
+      pendingSection.current = id;
       setIsMenuOpen(false);
+    } else {
+      scrollNow(id);
     }
+  };
+
+  const handleMenuClosed = () => {
+    if (pendingSection.current) scrollNow(pendingSection.current);
+    pendingSection.current = null;
   };
 
   return (
@@ -143,7 +161,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile menu */}
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={handleMenuClosed}>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
