@@ -4,7 +4,8 @@ import { FaGithub } from "react-icons/fa";
 import { ExternalLink, X } from "lucide-react";
 
 import PROJECT_IMG_1 from "../../assets/images/PROJECT_IMG_1.png";
-import PROJECT_IMG_2 from "../../assets/images/PROJECT_IMG_2.png";
+import PROJECT_RESUME_OPTIMIZER from "../../assets/images/PROJECT_RESUME_OPTIMIZER.png";
+import PROJECT_FOODIE from "../../assets/images/PROJECT_FOODIE.png";
 
 const PROJECTS = [
   {
@@ -19,13 +20,21 @@ const PROJECTS = [
   },
   {
     id: 2,
-    title: "Real-Time Chat Application",
+    title: "Resume Optimizer",
     description:
-      "A chat app where users can send and receive messages instantly. Built with React, with Supabase storing the messages.",
-    image: PROJECT_IMG_2,
-    tags: ["HTML", "CSS", "JavaScript", "React.js", "Supabase"],
-    liveUrl: "https://your-live-link.com",
-    githubUrl: "https://github.com/muktaa20/react-chat-app",
+      "An AI tool that compares a resume with a job description. It gives an ATS score, shows matched and missing keywords, suggests better bullet points and exports a clean ATS-friendly resume.",
+    image: PROJECT_RESUME_OPTIMIZER,
+    tags: ["React", "Node.js", "Express", "MongoDB", "Gemini API"],
+  },
+  {
+    id: 3,
+    title: "Foodie",
+    description:
+      "A food delivery website where users can browse dishes by category, search and filter the menu, add items to a cart, check out and track their order.",
+    image: PROJECT_FOODIE,
+    tags: ["HTML", "CSS", "JavaScript"],
+    liveUrl: "https://foodie-app-001.netlify.app/",
+    githubUrl: "https://github.com/muktaa20/Food-Delivery",
   },
 ];
 
@@ -152,22 +161,30 @@ export default function ProjectsSection() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={selectedProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
-                >
-                  <ExternalLink size={16} /> Live Demo
-                </a>
-                <a
-                  href={selectedProject.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 transition hover:ring-slate-400 dark:text-slate-200 dark:ring-white/15 dark:hover:ring-white/30"
-                >
-                  <FaGithub size={16} /> View Code
-                </a>
+                {selectedProject.liveUrl ? (
+                  <a
+                    href={selectedProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
+                  >
+                    <ExternalLink size={16} /> Live Demo
+                  </a>
+                ) : (
+                  <span className="inline-flex flex-1 items-center justify-center rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-500 dark:bg-white/5 dark:text-slate-400">
+                    Not live yet
+                  </span>
+                )}
+                {selectedProject.githubUrl && (
+                  <a
+                    href={selectedProject.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 transition hover:ring-slate-400 dark:text-slate-200 dark:ring-white/15 dark:hover:ring-white/30"
+                  >
+                    <FaGithub size={16} /> View Code
+                  </a>
+                )}
               </div>
             </motion.div>
           </motion.div>
